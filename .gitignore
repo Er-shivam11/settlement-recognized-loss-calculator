@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Environments
+.env
+.env.*
+venv/
+.venv/
+.envrc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Snowflake temporary upload compressed files
+*.gz
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+
+# rough
+myfolder_pract
+myfolder_pract/
