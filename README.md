@@ -1,43 +1,170 @@
-# AI-Powered Recognized Loss Calculator
+## 📘 Overview
 
-## Overview
-This project provides a dynamic tool to calculate recognized losses for clients based on settlement notices.  
-It uses Python, Flask, HTML, and Gemini 2.5 LLM to compute losses accurately.
+Welcome — this repository hosts a **AI-Powered Recognized Loss Calculator** designed for class-action settlement computations.
 
-## Features
-- Upload CSV/Excel files dynamically
-- Client-wise and fund-wise recognized loss calculations
-- AI-powered calculation logic (Gemini 2.5)
-- Reusable for new client datasets
+The project includes **two independent tools**:
 
-## File Structure
-recognized_loss_calculator/
+---
+
+### **1️⃣ Streamlit App (`App.py`)**
+
+A full UI-based calculator where users upload a CSV, and the app:
+
+* Cleans & structures the transaction data
+* Sends the structured JSON + rules to OpenAI GPT-4.1
+* Returns fund-wise recognized loss table
+* Works like a real internal calculator tool
+
+---
+
+### **2️⃣ Prompt-Based Script (`prompt_app.py`)**
+
+A very lightweight Python script:
+
+* Loads CSV
+* Converts to JSON payload
+* Sends to OpenAI GPT-4.1
+* Prints the recognized losses directly to console
+
+
+---
+
+## 📂 Repository Structure
+
+```
+recognized-loss-calculator/
 │
-├─ templates/
-│    ├─index.html    # HTML UI
-├─ server.py        # Flask backend and calculation logic
-├─ prompts.py       # Gemini AI prompts
-├─ requirements.txt # Required Python packages
-└─ README.md        # Documentation
+├── app.py                    ← Streamlit UI app  
+├── prompt_app.py        ← Standalone prompt-based loss calculator  
+├── masked_twitter.csv           ← example client trade data  
+├── requirements.txt          ← Python dependencies  
+├── .env              ← template for API key  
+├── .gitignore                ← ignore venv & cache  
+└── README.md                 ← this file  
+```
+
+---
+
+## 🔑 .env Setup
+
+Create `.env`:
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+Never commit your real key — `.gitignore` already protects `.env`.
+
+---
+
+## 🧰 Requirements
+
+Your `requirements.txt` should include:
+
+```
+streamlit
+pandas
+python-dotenv
+openai
+```
 
 
 
-## Usage
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the app: `python app.py`
-3. Open `http://127.0.0.1:5000/` in your browser
-4. Upload client transaction file
-5. View recognized losses per client and fund
+---
 
-## Notes
-- The dataset is dynamically handled; no hardcoding of input data.
-- AI generates formulas based on settlement rules.
+# ▶️ Running the Streamlit App (`App.py`)
 
+### **1. Clone the repository**
 
+```bash
+git clone https://github.com/Er-shivam11/settlement-recognized-loss-calculator.git
+cd settlement-recognized-loss-calculator
+```
 
-=========================================================================
+### **2. Create virtual environment**
 
-recognized_loss_calculator/
-│
-├─ masked_twitter.csv   # csv
-├─ app.py        # Flask backend and calculation logic
+**Windows**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+**macOS / Linux**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### **3. Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+### **4. Run the Streamlit app**
+
+```bash
+streamlit run app.py
+```
+
+The UI will open at:
+
+```
+http://localhost:8501
+```
+
+### **5. Upload CSV → Get Recognized Loss Table**
+
+The model will respond with:
+
+✔ A clean fund-wise table
+✔ Explanation of computation
+✔ Notes on zero-loss funds
+
+---
+
+# ▶️ Running the Standalone Script (`prompt_app.py`)
+
+This script runs **without Streamlit**:
+
+### **1. Ensure `.env` is set**
+
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+### **2. Run the script**
+
+```bash
+python prompt_app.py sample_data.csv
+```
+
+### **Output Example**
+
+```
+Fund 5   → $1,293
+Fund 63  → $7,359
+
+Explanation:
+• FIFO matching applied
+• Purchases outside class period ignored
+• Held shares computed using decline cap
+```
+
+---
+
+# 🎯 Why This Two-Tool Design Is Powerful
+
+### **Streamlit App (`App.py`)**
+
+✔ For end-users
+✔ Upload CSV → Get losses
+✔ UI-friendly & presentation-ready
+
+### **Core Script (`prompt_app.py`)**
+
+✔ For developers / analysts
+✔ Quick debugging
+✔ Easy integration in other pipelines
